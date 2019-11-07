@@ -2,7 +2,7 @@ Package: tsfgrnn
 Type: Package
 Title: Time Series Forecasting Using Generalized Regression Neural Networks
 Version: 0.1.0
-Author: c(
+Authors@R: c(
     person("Maria Pilar", "Frias-Bustamante", role = c("aut"), email = "mpfrias@ujaen.es"),
     person("Ana Maria", "Martinez-Rodriguez", role = c("aut"), email = "ammartin@ujaen.es"),
     person("Antonio", "Conde-Sanchez", role = c("aut"), email = "aconde@ujaen.es"),
@@ -23,3 +23,5 @@ Suggests:
 Imports: 
     ggplot2
 VignetteBuilder: knitr
+URL: https://github.com/franciscomartinezdelrio/tsfgrnn
+BugReports: https://github.com/franciscomartinezdelrio/tsfgrnn

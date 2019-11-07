@@ -82,7 +82,7 @@ Next, we list the parameters of `grnn_forecasting` (in the previous call most of
     : the forecast horizon, that is, the number of future values to be predicted.
     
 `lags`
-    : an integer vector indicating the lagged values used as autorregresive variables (for instance, 1:2 means that lagged values 1 and 2 should be used).
+    : an integer vector indicating the lagged values used as autoregressive variables (for instance, 1:2 means that lagged values 1 and 2 should be used).
 
 `sigma`
     : the sigma parameter of the GRNN model. By default, it is selected using an optimization algorithm.
@@ -168,9 +168,9 @@ We can also see the weights of the training instances used in the prediction of 
 grnn_weights(predr)[[1]]
 ```
 
-Due to the fact that in a recursive prediction a one-step ahead model is used iteratively as many times as the length of the forecast horizon, the function `grnn_weights` returns a list with the different weights used by the model in the different predictions. As we are interested in the forecast for horizon 1 we consult the weights associated with that forecast. The training pattern with the highest weight is (7, 9), that was highlitghted in the last plot.
+Due to the fact that in a recursive prediction a one-step ahead model is used iteratively as many times as the length of the forecast horizon, the function `grnn_weights` returns a list with the different weights used by the model in the different predictions. As we are interested in the forecast for horizon 1 we consult the weights associated with that forecast. The training pattern with the highest weight is (7, 9), that was highlighted in the last plot.
 
-Now, we plot infomation about how the forecast horizon 2 has been generated:
+Now, we plot information about how the forecast horizon 2 has been generated:
 
 ```{r, fig.width=6}
 plot_example(predr, position = 1, h = 2)
@@ -260,7 +260,7 @@ pred <- grnn_forecasting(USAccDeaths, h = 12, lags = 1:12, sigma = 0.05)
 plot(pred)
 ```
 
-As seen in previous examples, when this parameter is omitted in the function call it is automatically selected. The automatic selection is based on maximising a forecast accuracy measure using the rolling origing evaluation.
+As seen in previous examples, when this parameter is omitted in the function call it is automatically selected. The automatic selection is based on maximising a forecast accuracy measure using the rolling origin evaluation.
 
 ### The autoregressive lags
 
@@ -271,7 +271,7 @@ also rely on the automatic selection. This is carried out according to the follo
 
 As described above, currently it is possible to choose between the MIMO and recursive strategies. In our experience, the recursive strategy tends to produce better results.
 
-## Preprocesing techniques
+## Preprocessing techniques
 
 Time series forecasting methodologies can take advantage of preprocessing techniques. Next, we describe some of these techniques.
 
@@ -279,7 +279,7 @@ Time series forecasting methodologies can take advantage of preprocessing techni
 
 In our experience, time series forecasting with GRNN tends to benefit from scaling the data. Therefore, `grnn_forecasting` scales by default the time series to the range [0, 1].
 
-### Detendring
+### Detrending
 
 In the previous examples we have used time series, such as 1:10 or 1:20, with a constant trend. We have seen how GRNN is not capable of capturing these trends well. The reason is simple, GRNN predicts a weighted average of historical values of the time series, so that it cannot predict correctly values out of the range of the time series. Currently, our package does not include tools to automatically detect trend and transform the time series accordingly. If you are forecasting a time series with trend you can take first differences to improve the forecast:
 

@@ -1,0 +1,52 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# tsfgrnn
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+The goal of tsfgrnn is to forecast time series using GRNN regression.
+
+## Installation
+
+You can install the released version of tsfgrnn from [CRAN](https://CRAN.R-project.org) with:
+
+``` r
+install.packages("tsfgrnn")
+```
+
+And the development version from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("franciscomartinezdelrio/tsfgrnn")
+```
+## Example
+
+This is a basic example which shows how to forecast with tsfgrnn:
+
+```{r example}
+library(tsfgrnn)
+pred <- grnn_forecasting(USAccDeaths, h = 12)
+pred$prediction # To see a time series with the forecasts
+plot(pred) # To see a plot with the forecast
+```
+
+To know more, read the package's vignette.
+
+## Acknowledgements
+
+Funds: This work was partially supported by the project TIN2015-68854-R (FEDER Founds) of the Spanish Ministry of Economy and Competitiveness.

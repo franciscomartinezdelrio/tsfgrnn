@@ -10,7 +10,7 @@
 #' @param lags An integer vector in increasing order expressing the lags used as
 #'   autoregressive variables.
 #' @param sigma A positive real value. The smoothing parameter in GRNN
-#'   regression. If NULL (the default) the paremeter is chosen using an
+#'   regression. If NULL (the default) the parameter is chosen using an
 #'   optimization tool.
 #' @param msas A string indicating the Multiple-Step Ahead Strategy used when
 #'   more than one value is predicted. It can be "MIMO" or "recursive" (the

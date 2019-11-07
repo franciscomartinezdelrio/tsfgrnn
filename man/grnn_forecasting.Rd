@@ -16,7 +16,7 @@ grnn_forecasting(timeS, h, lags = NULL, sigma = NULL,
 autoregressive variables.}
 
 \item{sigma}{A positive real value. The smoothing parameter in GRNN
-regression. If NULL (the default) the paremeter is chosen using an
+regression. If NULL (the default) the parameter is chosen using an
 optimization tool.}
 
 \item{msas}{A string indicating the Multiple-Step Ahead Strategy used when
