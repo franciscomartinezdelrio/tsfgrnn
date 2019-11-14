@@ -23,6 +23,9 @@ being used. It indicates the forecasting horizon}
 values are "preprocessed" (the default) and "original". That is, you can
 plot the preprocessed or the original time series.}
 }
+\value{
+A ggplot object representing an example used in the prediction.
+}
 \description{
 This function is useful to see how the forecast has been computed. An ordinal
 specifying the order of the weight has to be supplied and the function plots

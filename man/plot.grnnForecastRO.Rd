@@ -14,6 +14,9 @@ the maximum forecasting horizon of all the test sets is used.}
 
 \item{...}{Other plotting parameters to affect the plot.}
 }
+\value{
+None
+}
 \description{
 It plots the forecast associated with a test set generated with the function
 \code{\link{rolling_origin}}.

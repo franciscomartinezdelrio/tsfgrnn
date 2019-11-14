@@ -1,3 +1,15 @@
+## Resubmission
+This is a resubmission. In this version I have:
+
+* As suggested by the reviewer, I have shortened the title in the DESCRIPTION
+  file because exceeded 65 characters.
+  
+* Following the reviewer's advice we have developed more the Description field
+  explaining what the pacakges does in more detail.
+
+* I have also added missing \value tags in the .Rd files documenting two 
+  functions.
+  
 ## Test environments
 * local Windows install, R 3.6.1
 * Windows Server 2008 R2 SP1, R-devel, 32/64 bit
