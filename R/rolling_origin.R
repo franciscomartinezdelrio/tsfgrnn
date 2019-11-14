@@ -107,6 +107,7 @@ rolling_origin <- function(grnnf, h = NULL, rolling = TRUE) {
 #' @param h an integer. The forecasting horizon. If \code{NULL} (the default),
 #'    the maximum forecasting horizon of all the test sets is used.
 #' @param ... Other plotting parameters to affect the plot.
+#' @return None
 #'
 #' @export
 plot.grnnForecastRO <- function(x, h = NULL, ...) {

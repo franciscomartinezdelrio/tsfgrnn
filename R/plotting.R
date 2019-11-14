@@ -80,6 +80,7 @@ autoplot.grnnForecast <- function(forecast, highlight = c("none", "points")) {
 #' @param timeS A string value indicating what time series to plot. Possible
 #'   values are "preprocessed" (the default) and "original". That is, you can
 #'   plot the preprocessed or the original time series.
+#' @return A ggplot object representing an example used in the prediction.
 #'
 #' @examples
 #' pred <- grnn_forecasting(USAccDeaths, h = 12, lags = 1:12, sigma = 50)
