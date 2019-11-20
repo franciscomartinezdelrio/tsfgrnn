@@ -3,7 +3,7 @@ This is a resubmission. In this version I have:
 
 * As suggested by the reviewer, I have enclosed the names of packages between
   single quotes in the description field of the DESCRIPTION file.
-  
+
 ## Test environments
 * local Windows install, R 3.6.1
 * Windows Server 2008 R2 SP1, R-devel, 32/64 bit
