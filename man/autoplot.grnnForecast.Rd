@@ -4,8 +4,7 @@
 \alias{autoplot.grnnForecast}
 \title{Create a ggplot object from a grnnForecast object}
 \usage{
-\method{autoplot}{grnnForecast}(forecast, highlight = c("none",
-  "points"))
+\method{autoplot}{grnnForecast}(forecast, highlight = c("none", "points"))
 }
 \arguments{
 \item{forecast}{The grnnForecast object.}

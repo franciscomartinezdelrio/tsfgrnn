@@ -67,29 +67,31 @@ rolling_origin <- function(grnnf, h = NULL, rolling = TRUE) {
   }
   colnames(test_sets)   <-  paste("h=", 1:h, sep = "")
   colnames(predictions) <-  paste("h=", 1:h, sep = "")
-  errors <- test_sets - predictions
-  g_rmse <- sqrt(mean(errors ^ 2, na.rm = TRUE))
-  g_mae  <- mean(abs(errors), na.rm = TRUE)
-  g_mape <- mean(abs(100*errors/test_sets), na.rm = TRUE)
-  global_accu <- c(g_rmse, g_mae, g_mape)
-  names(global_accu) <- c("RMSE", "MAE", "MAPE")
+  errors  <- test_sets - predictions
+  g_rmse  <- sqrt(mean(errors ^ 2, na.rm = TRUE))
+  g_mae   <- mean(abs(errors), na.rm = TRUE)
+  g_mape  <- mean(abs(100*errors/test_sets), na.rm = TRUE)
+  g_smape <- mean(abs(test_sets - predictions)/(abs(test_sets)+abs(predictions))*200, na.rm = TRUE)
+  global_accu <- c(g_rmse, g_mae, g_mape, g_smape)
+  names(global_accu) <- c("RMSE", "MAE", "MAPE", "SMAPE")
 
   accu <- function(c) {
-    rmse <- sqrt(mean(errors[, c] ^ 2, na.rm = TRUE))
-    mae  <- mean(abs(errors[, c]), na.rm = TRUE)
-    mape <- mean(abs(100*errors[, c]/test_sets[, c]), na.rm = TRUE)
-    c(rmse, mae, mape)
+    rmse  <- sqrt(mean(errors[, c] ^ 2, na.rm = TRUE))
+    mae   <- mean(abs(errors[, c]), na.rm = TRUE)
+    mape  <- mean(abs(100*errors[, c]/test_sets[, c]), na.rm = TRUE)
+    smape <- mean(abs(test_sets[, c] - predictions[, c])/(abs(test_sets[, c])+abs(predictions[, c]))*200, na.rm = TRUE)
+    c(rmse, mae, mape, smape)
   }
   h_accu <- sapply(1:h, accu)
   colnames(h_accu) <-  paste("h=", 1:h, sep = "")
-  rownames(h_accu) <- c("RMSE", "MAE", "MAPE")
+  rownames(h_accu) <- c("RMSE", "MAE", "MAPE", "SMAPE")
 
   structure(
     list(
       grnnf = grnnf,
       test_sets = test_sets,
       predictions = predictions,
-      errors = test_sets - predictions,
+      errors = errors,
       global_accu = global_accu,
       h_accu = h_accu
     ),

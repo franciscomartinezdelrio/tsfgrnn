@@ -4,8 +4,14 @@
 \alias{grnn_forecasting}
 \title{Time series forecasting using GRNN regression}
 \usage{
-grnn_forecasting(timeS, h, lags = NULL, sigma = NULL,
-  msas = c("recursive", "MIMO"), scale = TRUE)
+grnn_forecasting(
+  timeS,
+  h,
+  lags = NULL,
+  sigma = NULL,
+  msas = c("recursive", "MIMO"),
+  scale = TRUE
+)
 }
 \arguments{
 \item{timeS}{A numeric vector or time series of class \code{ts}.}

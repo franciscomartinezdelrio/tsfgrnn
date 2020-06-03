@@ -4,8 +4,7 @@
 \alias{plot_example}
 \title{Plot an example used in a prediction of a grnnForecast object}
 \usage{
-plot_example(forecast, position, h = 1, timeS = c("preprocessed",
-  "original"))
+plot_example(forecast, position, h = 1, timeS = c("preprocessed", "original"))
 }
 \arguments{
 \item{forecast}{The grnnForecast object.}
