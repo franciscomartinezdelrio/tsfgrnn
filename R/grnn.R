@@ -70,17 +70,6 @@ grnn_model <- function(timeS, lags, sigma, nt = 1) {
 # model <- grnn_model(ts(c(2, 3, 1, 5, 4, 0, 7, 1, 2)), lags = 1:2, sigma = 1)
 # regression(model, c(1, 2))
 regression <- function(model, example) {
-  cw <- function(p) {
-    exp(-1 / (2*model$sigma ^ 2) * sum((p - example) ^ 2))
-  }
-  w <- apply(model$examples$patterns, 1, cw)
-  if (sum(w) == 0) {
-    w <- w + 1 / length(w)
-  } else {
-    w <-  w / sum(w)
-  }
-  list(
-    prediction = unname(colSums(w * model$examples$targets)),
-    weights = w
-  )
+  regression_2(model$sigma, model$examples$patterns, model$example$targets,
+                     example)
 }

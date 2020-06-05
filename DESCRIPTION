@@ -1,7 +1,7 @@
 Package: tsfgrnn
 Type: Package
 Title: Time Series Forecasting Using GRNN
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: c(
     person("Maria Pilar", "Frias-Bustamante", role = c("aut"), email = "mpfrias@ujaen.es"),
     person("Ana Maria", "Martinez-Rodriguez", role = c("aut"), email = "ammartin@ujaen.es"),
@@ -27,7 +27,10 @@ Suggests:
     knitr,
     rmarkdown
 Imports: 
-    ggplot2
+    ggplot2,
+    Rcpp
 VignetteBuilder: knitr
 URL: https://github.com/franciscomartinezdelrio/tsfgrnn
 BugReports: https://github.com/franciscomartinezdelrio/tsfgrnn
+LinkingTo: 
+    Rcpp

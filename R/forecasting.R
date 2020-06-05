@@ -84,17 +84,17 @@ grnn_forecasting <- function(timeS, h, lags = NULL, sigma = NULL,
       r <- rolling_origin(f)
       r$global_accu["RMSE"]
     }
-    # x <- stats::optim(3, opt, method = "Brent", lower = 0, upper = 100)
-    # sigma <- x$par
-    mini = -1
-    for (x in seq(0.1, 1.2, by = 0.1)) {
-      f$model$sigma <- x
-      r <- rolling_origin(f)
-      if (mini == -1 || r$global_accu["RMSE"] < mini) {
-        sigma <- x
-        mini <- r$global_accu["RMSE"]
-      }
-    }
+    x <- stats::optim(3, opt, method = "Brent", lower = 0, upper = 1000000)
+    sigma <- x$par
+    # mini = -1
+    # for (x in seq(0.1, 1.2, by = 0.1)) {
+    #   f$model$sigma <- x
+    #   r <- rolling_origin(f)
+    #   if (mini == -1 || r$global_accu["RMSE"] < mini) {
+    #     sigma <- x
+    #     mini <- r$global_accu["RMSE"]
+    #   }
+    # }
     print(sigma)
   }
   stopifnot(is.numeric(sigma))
