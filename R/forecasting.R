@@ -9,9 +9,11 @@
 #' @param h A positive integer. Number of periods for forecasting.
 #' @param lags An integer vector in increasing order expressing the lags used as
 #'   autoregressive variables.
-#' @param sigma A positive real value. The smoothing parameter in GRNN
-#'   regression. If NULL (the default) the parameter is chosen using an
-#'   optimization tool.
+#' @param sigma A positive real value or a character value. The smoothing
+#'   parameter in GRNN regression. Two character values are possible, "ROLLING"
+#'   (the default) and "FIXED", in which case the parameter is chosen using an
+#'   optimization tool with rolling origin evaluation or fixed origin
+#'   evaluation.
 #' @param msas A string indicating the Multiple-Step Ahead Strategy used when
 #'   more than one value is predicted. It can be "MIMO" or "recursive" (the
 #'   default).
@@ -31,7 +33,7 @@
 #' pred <- grnn_forecasting(USAccDeaths, h = 12, lags = 1:12)
 #' plot(pred)
 #' @export
-grnn_forecasting <- function(timeS, h, lags = NULL, sigma = NULL,
+grnn_forecasting <- function(timeS, h, lags = NULL, sigma = "ROLLING",
                             msas = c("recursive", "MIMO"),
                             scale = TRUE) {
   # Check timeS parameter
@@ -77,14 +79,16 @@ grnn_forecasting <- function(timeS, h, lags = NULL, sigma = NULL,
   stopifnot(lags[1] >= 1)
 
   # Check sigma parameter
-  if (is.null(sigma)) {
-    f <- grnn_forecasting(pre_timeS, h = h, lags, 3, msas, scale = FALSE)
+  stopifnot(is.numeric(sigma) && sigma > 0 ||
+              is.character(sigma) && sigma %in% c("ROLLING", "FIXED"))
+  if (is.character(sigma)) {
+    f <- grnn_forecasting(pre_timeS, h = h, lags = lags, sigma = 3, msas = msas, scale = FALSE)
     opt <- function(sigmav) {
       f$model$sigma <- sigmav
-      r <- rolling_origin(f)
+      r <- rolling_origin(f, rolling = sigma == "ROLLING")
       r$global_accu["RMSE"]
     }
-    x <- stats::optim(3, opt, method = "Brent", lower = 0, upper = 1000000)
+    x <- stats::optim(3, opt, method = "Brent", lower = 0, upper = 1e6)
     sigma <- x$par
     # mini = -1
     # for (x in seq(0.1, 1.2, by = 0.1)) {
