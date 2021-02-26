@@ -1,6 +1,7 @@
 ## tsfgrnn 0.3.0
 
 * Automatic computation of smoothing parameter can be done with rolling origin or fixed origin (less accurate, but faster).
+* Lags can be selected using forward selection or backward elimination (feature selection techniques)
 
 ## tsfgrnn 0.2.0
 

@@ -8,7 +8,11 @@
 #' @param timeS A numeric vector or time series of class \code{ts}.
 #' @param h A positive integer. Number of periods for forecasting.
 #' @param lags An integer vector in increasing order expressing the lags used as
-#'   autoregressive variables.
+#'   autoregressive variables. If NULL (the default) the lags are selected in a
+#'   fast, heuristic way. It is also possible to use the values \code{"FS"} and
+#'   \code{"BE"}, in which case, the lags are selected using forward selection
+#'   or backward elimination respectively. These techniques are feature
+#'   selection approaches.
 #' @param sigma A positive real value or a character value. The smoothing
 #'   parameter in GRNN regression. Two character values are possible, "ROLLING"
 #'   (the default) and "FIXED", in which case the parameter is chosen using an
@@ -62,7 +66,8 @@ grnn_forecasting <- function(timeS, h, lags = NULL, sigma = "ROLLING",
   msas <- match.arg(msas)
 
   # Check lags parameter
-  stopifnot(is.null(lags) || is.vector(lags, mode = "numeric"))
+  stopifnot(is.null(lags) || is.vector(lags, mode = "numeric")
+            || is.character(lags) && lags %in% c("FS", "BS"))
   if (is.null(lags)) {
     if (stats::frequency(timeS) > 1) {
       lags <- 1:stats::frequency(timeS)
@@ -73,6 +78,62 @@ grnn_forecasting <- function(timeS, h, lags = NULL, sigma = "ROLLING",
         lags = 1:5
       }
     }
+  } else if (is.character(lags) && lags == "FS") {
+    maxLag = 12
+    minLags <- numeric()
+    minimo <- 1e7
+    continuar <- TRUE
+    while (continuar) {
+      nuevoMinimo <- minimo
+      anotherLags <- setdiff(1:maxLag, minLags)
+      for (lag in anotherLags) {
+        lags <- sort(c(minLags, lag))
+        f <- grnn_forecasting(pre_timeS, h = h, lags = lags, sigma = sigma,
+                              msas = msas, scale = FALSE)
+        r <- rolling_origin(f, rolling = sigma == "ROLLING")
+        if (r$global_accu["RMSE"] < nuevoMinimo) {
+          lagsNuevoMin <- lags
+          nuevoMinimo <- r$global_accu["RMSE"]
+        }
+      }
+      if (nuevoMinimo < minimo) {
+        minLags <- lagsNuevoMin
+        minimo <- nuevoMinimo
+      } else {
+        continuar <- FALSE
+      }
+      if (length(minLags) == maxLag) continuar <- FALSE
+    }
+    lags = minLags
+  } else if (is.character(lags) && lags == "BE") {
+    maxLag = 12
+    minLags <- 1:maxLag
+    f <- grnn_forecasting(pre_timeS, h = h, lags = minLags, sigma = sigma,
+                          msas = msas, scale = FALSE)
+    r <- rolling_origin(f, rolling = sigma == "ROLLING")
+    minimo <- r$global_accu["RMSE"]
+    continuar <- TRUE
+    while (continuar) {
+      nuevoMinimo <- minimo
+      for (ind in seq_along(minLags)) {
+        lags <- minLags[-ind]
+        f <- grnn_forecasting(pre_timeS, h = h, lags = lags, sigma = sigma,
+                              msas = msas, scale = FALSE)
+        r <- rolling_origin(f, rolling = sigma == "ROLLING")
+        if (r$global_accu["RMSE"] < nuevoMinimo) {
+          lagsNuevoMin <- lags
+          nuevoMinimo <- r$global_accu["RMSE"]
+        }
+      }
+      if (nuevoMinimo < minimo) {
+        minLags <- lagsNuevoMin
+        minimo <- nuevoMinimo
+      } else {
+        continuar <- FALSE
+      }
+      if (length(minLags) == 1) continuar <- FALSE
+    }
+    lags = minLags
   }
 
   if (is.unsorted(lags)) stop("lags should be a vector in increasing order")
@@ -99,7 +160,7 @@ grnn_forecasting <- function(timeS, h, lags = NULL, sigma = "ROLLING",
     #     mini <- r$global_accu["RMSE"]
     #   }
     # }
-    print(sigma)
+    # print(sigma)
   }
   stopifnot(is.numeric(sigma))
   if (sigma[1] < 0) stop("sigma should be positive")

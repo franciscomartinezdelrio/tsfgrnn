@@ -23,7 +23,7 @@ autoregressive variables.}
 
 \item{sigma}{A positive real value or a character value. The smoothing
 parameter in GRNN regression. Two character values are possible, "ROLLING"
-(the default) and "FIXED". In this case the parameter is chosen using an
+(the default) and "FIXED", in which case the parameter is chosen using an
 optimization tool with rolling origin evaluation or fixed origin
 evaluation.}
 
