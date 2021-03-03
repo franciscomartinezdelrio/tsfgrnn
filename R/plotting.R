@@ -77,9 +77,6 @@ autoplot.grnnForecast <- function(forecast, highlight = c("none", "points")) {
 #'   is plotted and so on.
 #' @param h An integer. This value is only useful when the recursive strategy is
 #'   being used. It indicates the forecasting horizon
-#' @param timeS A string value indicating what time series to plot. Possible
-#'   values are "preprocessed" (the default) and "original". That is, you can
-#'   plot the preprocessed or the original time series.
 #' @return A ggplot object representing an example used in the prediction.
 #'
 #' @examples
@@ -87,9 +84,7 @@ autoplot.grnnForecast <- function(forecast, highlight = c("none", "points")) {
 #' library(ggplot2)
 #' plot_example(pred, 1)
 #' @export
-plot_example <- function(forecast, position, h = 1,
-                         timeS = c("preprocessed", "original")) {
-  timeS = match.arg(timeS)
+plot_example <- function(forecast, position, h = 1) {
 
   # Check position parameter
   stopifnot(is.numeric(position), length(position) == 1, position >= 1)
@@ -97,29 +92,16 @@ plot_example <- function(forecast, position, h = 1,
     stop(paste("There are only", nrow(forecast$model$examples$patterns),
                "training patterns"))
 
-  if (timeS == "preprocessed") {
-    # extract the time series
-    timeS <- data.frame(
-      x = as.vector(stats::time(forecast$model$ts)),
-      y = as.vector(forecast$model$ts)
-    )
-    # extract the forecast
-    pred <- data.frame(
-      x = as.vector(stats::time(forecast$pre_prediction)),
-      y = as.vector(forecast$pre_prediction)
-    )
-  } else {
-    # extract the time series
-    timeS <- data.frame(
-      x = as.vector(stats::time(forecast$orig_timeS)),
-      y = as.vector(forecast$orig_timeS)
-    )
-    # extract the forecast
-    pred <- data.frame(
-      x = as.vector(stats::time(forecast$prediction)),
-      y = as.vector(forecast$prediction)
-    )
-  }
+  # extract the time series
+  timeS <- data.frame(
+    x = as.vector(stats::time(forecast$orig_timeS)),
+    y = as.vector(forecast$orig_timeS)
+  )
+  # extract the forecast
+  pred <- data.frame(
+    x = as.vector(stats::time(forecast$prediction)),
+    y = as.vector(forecast$prediction)
+  )
 
   if (forecast$msas == "recursive") {
     return(plot_example_recursive(forecast, timeS, pred, position, h))

@@ -41,7 +41,7 @@ consists of the last \eqn{h - 1} values of the time series and so on (the
 last test set is formed by the last value of the time series).
 }
 \examples{
-pred <- grnn_forecasting(UKgas, h = 4, lags = 1:4, scale = FALSE)
+pred <- grnn_forecasting(UKgas, h = 4, lags = 1:4)
 ro <- rolling_origin(pred)
 print(ro$global_accu)
 }

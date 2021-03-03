@@ -4,7 +4,7 @@
 \alias{plot_example}
 \title{Plot an example used in a prediction of a grnnForecast object}
 \usage{
-plot_example(forecast, position, h = 1, timeS = c("preprocessed", "original"))
+plot_example(forecast, position, h = 1)
 }
 \arguments{
 \item{forecast}{The grnnForecast object.}
@@ -17,10 +17,6 @@ is plotted and so on.}
 
 \item{h}{An integer. This value is only useful when the recursive strategy is
 being used. It indicates the forecasting horizon}
-
-\item{timeS}{A string value indicating what time series to plot. Possible
-values are "preprocessed" (the default) and "original". That is, you can
-plot the preprocessed or the original time series.}
 }
 \value{
 A ggplot object representing an example used in the prediction.

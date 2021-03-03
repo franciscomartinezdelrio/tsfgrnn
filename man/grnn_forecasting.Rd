@@ -9,8 +9,7 @@ grnn_forecasting(
   h,
   lags = NULL,
   sigma = "ROLLING",
-  msas = c("recursive", "MIMO"),
-  scale = TRUE
+  msas = c("recursive", "MIMO")
 )
 }
 \arguments{
@@ -19,7 +18,11 @@ grnn_forecasting(
 \item{h}{A positive integer. Number of periods for forecasting.}
 
 \item{lags}{An integer vector in increasing order expressing the lags used as
-autoregressive variables.}
+autoregressive variables. If NULL (the default) the lags are selected in a
+fast, heuristic way. It is also possible to use the values \code{"FS"} and
+\code{"BE"}, in which case, the lags are selected using forward selection
+or backward elimination respectively. These techniques are feature
+selection approaches.}
 
 \item{sigma}{A positive real value or a character value. The smoothing
 parameter in GRNN regression. Two character values are possible, "ROLLING"
@@ -30,9 +33,6 @@ evaluation.}
 \item{msas}{A string indicating the Multiple-Step Ahead Strategy used when
 more than one value is predicted. It can be "MIMO" or "recursive" (the
 default).}
-
-\item{scale}{A logical. If \code{TRUE} (the default), the time series is
-scaled to the range [0, 1].}
 }
 \value{
 An object of class \code{"grnnForecast"}. The function

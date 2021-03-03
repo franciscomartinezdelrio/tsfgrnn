@@ -21,8 +21,6 @@
 #' @param msas A string indicating the Multiple-Step Ahead Strategy used when
 #'   more than one value is predicted. It can be "MIMO" or "recursive" (the
 #'   default).
-#' @param scale A logical. If \code{TRUE} (the default), the time series is
-#'   scaled to the range [0, 1].
 #' @return An object of class \code{"grnnForecast"}. The function
 #'   \code{\link[base]{summary}} can be used to obtain or print a summary of the
 #'   results. An object of class \code{"gnnForecast"} is a list containing at
@@ -38,26 +36,12 @@
 #' plot(pred)
 #' @export
 grnn_forecasting <- function(timeS, h, lags = NULL, sigma = "ROLLING",
-                            msas = c("recursive", "MIMO"),
-                            scale = TRUE) {
+                            msas = c("recursive", "MIMO")) {
   # Check timeS parameter
   stopifnot(stats::is.ts(timeS) || is.vector(timeS, mode = "numeric"))
   if (! stats::is.ts(timeS))
     timeS <- stats::as.ts(timeS)
   orig_timeS <- timeS
-
-  prepro <- list()
-  # Check scale parameter
-  stopifnot(is.logical(scale), length(scale) == 1)
-  if (scale) {
-    minimum <- min(orig_timeS)
-    maximum <- max(orig_timeS)
-    pre_timeS <- (orig_timeS - minimum) / (maximum - minimum)
-    prepro$scale <- list(scale = TRUE, minimum = minimum, maximum = maximum)
-  } else {
-    prepro$scale <- list(scale = FALSE)
-    pre_timeS <- orig_timeS
-  }
 
   # Check h parameter
   stopifnot(is.numeric(h), length(h) == 1, h >= 1)
@@ -67,7 +51,7 @@ grnn_forecasting <- function(timeS, h, lags = NULL, sigma = "ROLLING",
 
   # Check lags parameter
   stopifnot(is.null(lags) || is.vector(lags, mode = "numeric")
-            || is.character(lags) && lags %in% c("FS", "BS"))
+            || is.character(lags) && lags %in% c("FS", "BE"))
   if (is.null(lags)) {
     if (stats::frequency(timeS) > 1) {
       lags <- 1:stats::frequency(timeS)
@@ -88,8 +72,8 @@ grnn_forecasting <- function(timeS, h, lags = NULL, sigma = "ROLLING",
       anotherLags <- setdiff(1:maxLag, minLags)
       for (lag in anotherLags) {
         lags <- sort(c(minLags, lag))
-        f <- grnn_forecasting(pre_timeS, h = h, lags = lags, sigma = sigma,
-                              msas = msas, scale = FALSE)
+        f <- grnn_forecasting(timeS, h = h, lags = lags, sigma = sigma,
+                              msas = msas)
         r <- rolling_origin(f, rolling = sigma == "ROLLING")
         if (r$global_accu["RMSE"] < nuevoMinimo) {
           lagsNuevoMin <- lags
@@ -108,8 +92,8 @@ grnn_forecasting <- function(timeS, h, lags = NULL, sigma = "ROLLING",
   } else if (is.character(lags) && lags == "BE") {
     maxLag = 12
     minLags <- 1:maxLag
-    f <- grnn_forecasting(pre_timeS, h = h, lags = minLags, sigma = sigma,
-                          msas = msas, scale = FALSE)
+    f <- grnn_forecasting(timeS, h = h, lags = minLags, sigma = sigma,
+                          msas = msas)
     r <- rolling_origin(f, rolling = sigma == "ROLLING")
     minimo <- r$global_accu["RMSE"]
     continuar <- TRUE
@@ -117,8 +101,8 @@ grnn_forecasting <- function(timeS, h, lags = NULL, sigma = "ROLLING",
       nuevoMinimo <- minimo
       for (ind in seq_along(minLags)) {
         lags <- minLags[-ind]
-        f <- grnn_forecasting(pre_timeS, h = h, lags = lags, sigma = sigma,
-                              msas = msas, scale = FALSE)
+        f <- grnn_forecasting(timeS, h = h, lags = lags, sigma = sigma,
+                              msas = msas)
         r <- rolling_origin(f, rolling = sigma == "ROLLING")
         if (r$global_accu["RMSE"] < nuevoMinimo) {
           lagsNuevoMin <- lags
@@ -143,7 +127,7 @@ grnn_forecasting <- function(timeS, h, lags = NULL, sigma = "ROLLING",
   stopifnot(is.numeric(sigma) && sigma > 0 ||
               is.character(sigma) && sigma %in% c("ROLLING", "FIXED"))
   if (is.character(sigma)) {
-    f <- grnn_forecasting(pre_timeS, h = h, lags = lags, sigma = 3, msas = msas, scale = FALSE)
+    f <- grnn_forecasting(timeS, h = h, lags = lags, sigma = 3, msas = msas)
     opt <- function(sigmav) {
       f$model$sigma <- sigmav
       r <- rolling_origin(f, rolling = sigma == "ROLLING")
@@ -166,17 +150,16 @@ grnn_forecasting <- function(timeS, h, lags = NULL, sigma = "ROLLING",
   if (sigma[1] < 0) stop("sigma should be positive")
 
   if (msas == "recursive") {
-    fit <- grnn_model(pre_timeS, lags = lags, sigma = sigma, nt = 1)
+    fit <- grnn_model(timeS, lags = lags, sigma = sigma, nt = 1)
   } else { # MIMO
-    fit <- grnn_model(pre_timeS, lags = lags, sigma = sigma, nt = h)
+    fit <- grnn_model(timeS, lags = lags, sigma = sigma, nt = h)
   }
   r <- structure(
     list(
       call = match.call(),
       model = fit,
       msas = msas,
-      prepro = prepro,
-      orig_timeS = orig_timeS
+      orig_timeS = timeS
     ),
     class = "grnnForecast"
   )
@@ -245,17 +228,8 @@ predict.grnnForecast <- function(object, h, ...) {
                           start = stats::end(temp),
                           frequency = stats::frequency(ts)
   )
-  if (object$prepro$scale$scale) {
-    minimum <- object$prepro$scale$minimum
-    maximum <- object$prepro$scale$maximum
-    orig_prediction <- prediction * (maximum - minimum) + minimum
-  } else {
-    orig_prediction <- prediction
-  }
-
   r <- object
-  r$prediction = orig_prediction
-  r$pre_prediction = prediction
+  r$prediction = prediction
   r$weights = reg$weights
   r
 }

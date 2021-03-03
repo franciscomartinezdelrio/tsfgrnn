@@ -28,7 +28,7 @@
 #'   the errors for every forecasting horizon.}
 #'
 #' @examples
-#' pred <- grnn_forecasting(UKgas, h = 4, lags = 1:4, scale = FALSE)
+#' pred <- grnn_forecasting(UKgas, h = 4, lags = 1:4)
 #' ro <- rolling_origin(pred)
 #' print(ro$global_accu)
 #' @export
@@ -59,8 +59,7 @@ rolling_origin <- function(grnnf, h = NULL, rolling = TRUE) {
                              h = hor,
                              lags = rev(grnnf$model$lags),
                              sigma = grnnf$model$sigma,
-                             msas = grnnf$msas,
-                             scale = grnnf$prepro$scale$scale
+                             msas = grnnf$msas
     )
     predictions[ind, 1:hor] <- pred$prediction
     ind <- ind - 1
