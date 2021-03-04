@@ -5,3 +5,15 @@ regression_2 <- function(sigma, patterns, targets, example) {
     .Call(`_tsfgrnn_regression_2`, sigma, patterns, targets, example)
 }
 
+build_examples2 <- function(timeS, lags, nt) {
+    .Call(`_tsfgrnn_build_examples2`, timeS, lags, nt)
+}
+
+build_examples_m <- function(timeS, lags, nt) {
+    .Call(`_tsfgrnn_build_examples_m`, timeS, lags, nt)
+}
+
+build_examples_a <- function(timeS, lags, nt) {
+    .Call(`_tsfgrnn_build_examples_a`, timeS, lags, nt)
+}
+

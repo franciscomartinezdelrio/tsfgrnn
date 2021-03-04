@@ -9,7 +9,8 @@ grnn_forecasting(
   h,
   lags = NULL,
   sigma = "ROLLING",
-  msas = c("recursive", "MIMO")
+  msas = c("recursive", "MIMO"),
+  transform = c("multiplicative", "additive", "none")
 )
 }
 \arguments{
@@ -33,6 +34,11 @@ evaluation.}
 \item{msas}{A string indicating the Multiple-Step Ahead Strategy used when
 more than one value is predicted. It can be "MIMO" or "recursive" (the
 default).}
+
+\item{transform}{A character value indicating whether the training samples
+are transformed. If the time series has a trend it is recommended. By
+default is \code{"multiplicative"} (multiplicative transformation). It is also
+possible a multiplicative transformation or no transformation.}
 }
 \value{
 An object of class \code{"grnnForecast"}. The function

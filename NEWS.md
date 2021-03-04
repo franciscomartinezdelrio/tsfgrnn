@@ -1,10 +1,14 @@
-## tsfgrnn 0.3.0
+## tsfgrnn 1.0.0
 
 * Automatic computation of smoothing parameter can be done with rolling origin or fixed origin (less accurate, but faster).
 
 * Lags can be selected using forward selection or backward elimination (feature selection techniques)
 
 * Time series cannot be scaled
+
+* The model is built using faster Rcpp code
+
+* An optional transformation to the training samples has been added. It improves forecast accuracy for time series with a trend
 
 ## tsfgrnn 0.2.0
 

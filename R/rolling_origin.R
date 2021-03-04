@@ -59,7 +59,8 @@ rolling_origin <- function(grnnf, h = NULL, rolling = TRUE) {
                              h = hor,
                              lags = rev(grnnf$model$lags),
                              sigma = grnnf$model$sigma,
-                             msas = grnnf$msas
+                             msas = grnnf$msas,
+                             transform = grnnf$transformation
     )
     predictions[ind, 1:hor] <- pred$prediction
     ind <- ind - 1

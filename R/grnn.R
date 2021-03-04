@@ -13,24 +13,33 @@
 # @examples
 # build_examples(ts(1:5), lags = 2:1)
 # build_examples(ts(1:5), lags = 2:1, nt = 2)
-build_examples <- function(timeS, lags, nt = 1) {
-  MAXLAG   <- lags[1]
-  NCOL     <- length(lags)
-  NROW     <- length(timeS) - MAXLAG - nt + 1
-  patterns <- matrix(0, nrow = NROW, ncol = NCOL)
-  targets  <- matrix(0, nrow = NROW, ncol = nt)
-  row <- 1
-  for (ind in seq(MAXLAG + nt, length(timeS))) {
-    patterns[row, ] <- timeS[ind - nt + 1 - lags]
-    targets[row, ] <- timeS[(ind - nt + 1):ind]
-    row <- row + 1
+build_examples <- function(timeS, lags, nt = 1, transform) {
+  # MAXLAG   <- lags[1]
+  # NCOL     <- length(lags)
+  # NROW     <- length(timeS) - MAXLAG - nt + 1
+  # patterns <- matrix(0, nrow = NROW, ncol = NCOL)
+  # targets  <- matrix(0, nrow = NROW, ncol = nt)
+  # row <- 1
+  # for (ind in seq(MAXLAG + nt, length(timeS))) {
+  #   the_mean <- mean(timeS[ind - nt + 1 - lags])
+  #   patterns[row, ] <- timeS[ind - nt + 1 - lags] / the_mean
+  #   targets[row, ] <- timeS[(ind - nt + 1):ind] / the_mean
+  #   row <- row + 1
+  # }
+  if (transform == "none") {
+    r <- build_examples2(timeS, lags, nt)
+  } else if (transform == "multiplicative") {
+    r <- build_examples_m(timeS, lags, nt)
+  }else if (transform == "additive") {
+    r <- build_examples_a(timeS, lags, nt)
   }
-  colnames(patterns) <- paste0("Lag", lags)
-  colnames(targets)  <- paste0("H", 1:nt)
-  list(
-    patterns = patterns,
-    targets = targets
-  )
+  colnames(r$patterns) <- paste0("Lag", lags)
+  colnames(r$targets)  <- paste0("H", 1:nt)
+  r
+  # list(
+  #   patterns = patterns,
+  #   targets = targets
+  # )
 }
 
 # Create a GRNN model.
@@ -44,12 +53,12 @@ build_examples <- function(timeS, lags, nt = 1) {
 # @param nt The number of targets (amount of horizons to be forecast).
 # @return An object of type grnnModel.
 #
-grnn_model <- function(timeS, lags, sigma, nt = 1) {
+grnn_model <- function(timeS, lags, sigma, nt = 1, transform) {
   lags <- rev(lags)
   stopifnot(utils::tail(lags, 1) >= 1)
   MAXLAG <- lags[1]
   if (MAXLAG + nt > length(timeS)) stop("Impossible to create one example")
-  examples <- build_examples(timeS, lags, nt)
+  examples <- build_examples(timeS, lags, nt, transform)
   structure(
     list(
       ts = timeS,

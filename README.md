@@ -4,7 +4,6 @@
 # tsfgrnn
 
 <!-- badges: start -->
-
 <!-- badges: end -->
 
 The goal of tsfgrnn is to forecast time series using GRNN regression.
@@ -31,13 +30,15 @@ This is a basic example which shows how to forecast with tsfgrnn:
 
 ``` r
 library(tsfgrnn)
+#> Warning: replacing previous import 'vctrs::data_frame' by 'tibble::data_frame'
+#> when loading 'dplyr'
 pred <- grnn_forecasting(USAccDeaths, h = 12)
 pred$prediction # To see a time series with the forecasts
 #>            Jan       Feb       Mar       Apr       May       Jun       Jul
-#> 1979  8156.514  7303.029  8123.393  7870.155  9386.960  9555.996 10093.013
+#> 1979  8141.528  7216.485  8123.807  8432.028  9466.795  9829.624 10958.570
 #>            Aug       Sep       Oct       Nov       Dec
-#> 1979  9620.001  8285.021  8466.004  8160.001  8034.015
-plot(pred) # To see a plot with the forecast
+#> 1979 10246.196  9490.048  9439.096  8994.771  9615.380
+plot(pred)      # To see a plot with the forecast
 ```
 
 <img src="man/figures/README-example-1.png" width="100%" />

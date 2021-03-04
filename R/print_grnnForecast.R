@@ -23,7 +23,8 @@ summary.grnnForecast <- function (object, ...) {
       sigma = object$model$sigma,
       msas = object$msas,
       lags = rev(object$model$lags),
-      prediction = object$prediction
+      prediction = object$prediction,
+      transformation = object$transformation
     ),
     class = "summary.grnnForecast"
   )
@@ -43,6 +44,7 @@ print.summary.grnnForecast <- function (x, ...) {
   cat("Multiple-Step Ahead Strategy:", x$msas, "\n")
   cat("Sigma (smoothing parameter):", x$sigma, "\n")
   cat("Autoregressive lags:", x$lags, "\n")
+  cat("Type of training samples transformation:", x$transformation, "\n")
   cat("Forecasting horizon:", length(x$prediction), "\n")
   cat("Forecast:\n")
   print(x$prediction)

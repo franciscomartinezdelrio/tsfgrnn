@@ -4,7 +4,7 @@ output: github_document
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-```{r, include = FALSE}
+```{r, include = FALSE} 
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
@@ -42,7 +42,7 @@ This is a basic example which shows how to forecast with tsfgrnn:
 library(tsfgrnn)
 pred <- grnn_forecasting(USAccDeaths, h = 12)
 pred$prediction # To see a time series with the forecasts
-plot(pred) # To see a plot with the forecast
+plot(pred)      # To see a plot with the forecast
 ```
 
 To know more, read the package's vignette.

@@ -1,18 +1,11 @@
-## Resubmission
-This is a resubmission. In this version I have:
-
-* As suggested by the reviewer, I have enclosed the names of packages between
-  single quotes in the description field of the DESCRIPTION file.
-
 ## Test environments
-* local Windows install, R 3.6.1
-* Windows Server 2008 R2 SP1, R-devel, 32/64 bit
-* Ubuntu Linux 16.04 LTS, R-release, GCC
-* Fedora Linux, R-devel, clang, gfortran
+* local Windows install, R 4.0.5
+* Debian Linux, R-devel, GCC ASAN/UBSAN
+* Ubuntu Linux 20.04.1 LTS, R-release, GCC
+*	Fedora Linux, R-devel, clang, gfortran
 
 ## R CMD check results
-There were no ERRORs or WARNINGs. There should be 1 NOTE because this is the first time the package is submitted to CRAN. There is also a note because some
-words could be misspelled in DESCRIPTION, but they are correctly spelled.
+There were no ERRORs, WARNINGs or NOTEs.
 
 ## Downstream dependencies
 The changes made to this package have no effect in downstream dependencies.

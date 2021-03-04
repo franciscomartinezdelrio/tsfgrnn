@@ -21,6 +21,10 @@
 #' @param msas A string indicating the Multiple-Step Ahead Strategy used when
 #'   more than one value is predicted. It can be "MIMO" or "recursive" (the
 #'   default).
+#' @param transform A character value indicating whether the training samples
+#'   are transformed. If the time series has a trend it is recommended. By
+#'   default is \code{"multiplicative"} (multiplicative transformation). It is also
+#'   possible a multiplicative transformation or no transformation.
 #' @return An object of class \code{"grnnForecast"}. The function
 #'   \code{\link[base]{summary}} can be used to obtain or print a summary of the
 #'   results. An object of class \code{"gnnForecast"} is a list containing at
@@ -36,7 +40,8 @@
 #' plot(pred)
 #' @export
 grnn_forecasting <- function(timeS, h, lags = NULL, sigma = "ROLLING",
-                            msas = c("recursive", "MIMO")) {
+                            msas = c("recursive", "MIMO"),
+                            transform = c("multiplicative", "additive", "none")) {
   # Check timeS parameter
   stopifnot(stats::is.ts(timeS) || is.vector(timeS, mode = "numeric"))
   if (! stats::is.ts(timeS))
@@ -48,6 +53,9 @@ grnn_forecasting <- function(timeS, h, lags = NULL, sigma = "ROLLING",
 
   # msas parameter
   msas <- match.arg(msas)
+
+  # Check transform parameter
+  transform <- match.arg(transform)
 
   # Check lags parameter
   stopifnot(is.null(lags) || is.vector(lags, mode = "numeric")
@@ -73,7 +81,7 @@ grnn_forecasting <- function(timeS, h, lags = NULL, sigma = "ROLLING",
       for (lag in anotherLags) {
         lags <- sort(c(minLags, lag))
         f <- grnn_forecasting(timeS, h = h, lags = lags, sigma = sigma,
-                              msas = msas)
+                              msas = msas, transform = transform)
         r <- rolling_origin(f, rolling = sigma == "ROLLING")
         if (r$global_accu["RMSE"] < nuevoMinimo) {
           lagsNuevoMin <- lags
@@ -93,7 +101,7 @@ grnn_forecasting <- function(timeS, h, lags = NULL, sigma = "ROLLING",
     maxLag = 12
     minLags <- 1:maxLag
     f <- grnn_forecasting(timeS, h = h, lags = minLags, sigma = sigma,
-                          msas = msas)
+                          msas = msas, transform = transform)
     r <- rolling_origin(f, rolling = sigma == "ROLLING")
     minimo <- r$global_accu["RMSE"]
     continuar <- TRUE
@@ -102,7 +110,7 @@ grnn_forecasting <- function(timeS, h, lags = NULL, sigma = "ROLLING",
       for (ind in seq_along(minLags)) {
         lags <- minLags[-ind]
         f <- grnn_forecasting(timeS, h = h, lags = lags, sigma = sigma,
-                              msas = msas)
+                              msas = msas, transform = transform)
         r <- rolling_origin(f, rolling = sigma == "ROLLING")
         if (r$global_accu["RMSE"] < nuevoMinimo) {
           lagsNuevoMin <- lags
@@ -127,7 +135,8 @@ grnn_forecasting <- function(timeS, h, lags = NULL, sigma = "ROLLING",
   stopifnot(is.numeric(sigma) && sigma > 0 ||
               is.character(sigma) && sigma %in% c("ROLLING", "FIXED"))
   if (is.character(sigma)) {
-    f <- grnn_forecasting(timeS, h = h, lags = lags, sigma = 3, msas = msas)
+    f <- grnn_forecasting(timeS, h = h, lags = lags, sigma = 3, msas = msas,
+                          transform = transform)
     opt <- function(sigmav) {
       f$model$sigma <- sigmav
       r <- rolling_origin(f, rolling = sigma == "ROLLING")
@@ -150,20 +159,24 @@ grnn_forecasting <- function(timeS, h, lags = NULL, sigma = "ROLLING",
   if (sigma[1] < 0) stop("sigma should be positive")
 
   if (msas == "recursive") {
-    fit <- grnn_model(timeS, lags = lags, sigma = sigma, nt = 1)
+    fit <- grnn_model(timeS, lags = lags, sigma = sigma, nt = 1,
+                      transform = transform)
   } else { # MIMO
-    fit <- grnn_model(timeS, lags = lags, sigma = sigma, nt = h)
+    fit <- grnn_model(timeS, lags = lags, sigma = sigma, nt = h,
+                      transform = transform)
   }
   r <- structure(
     list(
       call = match.call(),
       model = fit,
       msas = msas,
-      orig_timeS = timeS
+      orig_timeS = timeS,
+      transformation = transform
     ),
     class = "grnnForecast"
   )
-  predict(r, h)
+  x <- predict(r, h)
+  x
 }
 
 #' Predict method for GRNN models for time series forecasting.
@@ -196,14 +209,27 @@ predict.grnnForecast <- function(object, h, ...) {
 
   if (object$msas == "recursive") {
     ts <- object$model$ts
-    reg <- recPrediction(object$model, h = h)
+    reg <- recPrediction(object, h = h)
   } else {# MIMO
     ts <- object$model$ts
     hor = ncol(object$model$examples$targets)
     if (h != hor)
       stop(paste("The model only predicts horizon", hor))
     example <- as.vector(ts[(length(ts) + 1) - object$model$lags])
+    if (object$transformation != "none") {
+      the_mean <- mean(example)
+      if (object$transformation == "multiplicative")
+        example <- example / the_mean
+      else
+        example <- example - the_mean
+    }
     reg <- regression(object$model, example)
+    if (object$transformation != "none") {
+      if (object$transformation == "multiplicative")
+        reg$prediction <- reg$prediction * the_mean
+      else
+        reg$prediction <- reg$prediction + the_mean
+    }
   }
   # else { # direct
   #   ts <- object$model[[1]]$model$ts
@@ -234,14 +260,28 @@ predict.grnnForecast <- function(object, h, ...) {
   r
 }
 
-recPrediction <- function(model, h) {
+recPrediction <- function(object, h) {
+  model <- object$model
   prediction <- numeric(h)
   weights <- matrix(nrow = h, ncol = nrow(model$examples$patterns))
   values <- as.vector(model$ts)
   for (hor in 1:h) {
     example <- values[(length(values) + 1) - model$lags]
+    if (object$transformation != "none") {
+      the_mean <- mean(example)
+      if (object$transformation == "multiplicative")
+        example <- example / the_mean
+      else
+        example <- example - the_mean
+    }
     reg <- regression(model, example)
     prediction[hor] <- reg$prediction
+    if (object$transformation != "none") {
+      if (object$transformation == "multiplicative")
+        prediction[hor] <- prediction[hor] * the_mean
+      else
+        prediction[hor] <- prediction[hor] + the_mean
+    }
     weights[hor, ] <- reg$weights
     values <- c(values, prediction[hor])
   }
