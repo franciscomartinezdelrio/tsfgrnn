@@ -1,3 +1,7 @@
+## tsfgrnn 1.0.1
+
+* The default transformation is now additive instead of multiplicative.
+
 ## tsfgrnn 1.0.0
 
 * Automatic computation of smoothing parameter can be done with rolling origin or fixed origin (less accurate, but faster).

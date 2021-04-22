@@ -10,7 +10,7 @@ grnn_forecasting(
   lags = NULL,
   sigma = "ROLLING",
   msas = c("recursive", "MIMO"),
-  transform = c("multiplicative", "additive", "none")
+  transform = c("additive", "multiplicative", "none")
 )
 }
 \arguments{
@@ -37,7 +37,7 @@ default).}
 
 \item{transform}{A character value indicating whether the training samples
 are transformed. If the time series has a trend it is recommended. By
-default is \code{"multiplicative"} (multiplicative transformation). It is also
+default is \code{"additive"} (additive transformation). It is also
 possible a multiplicative transformation or no transformation.}
 }
 \value{
