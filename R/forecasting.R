@@ -23,8 +23,8 @@
 #'   default).
 #' @param transform A character value indicating whether the training samples
 #'   are transformed. If the time series has a trend it is recommended. By
-#'   default is \code{"additive"} (additive transformation). It is also
-#'   possible a multiplicative transformation or no transformation.
+#'   default is \code{"additive"} (additive transformation). It is also possible
+#'   a multiplicative transformation or no transformation.
 #' @return An object of class \code{"grnnForecast"}. The function
 #'   \code{\link[base]{summary}} can be used to obtain or print a summary of the
 #'   results. An object of class \code{"gnnForecast"} is a list containing at
@@ -34,6 +34,11 @@
 #'   Ahead Strategy.} \item{\code{prediction}}{a time series with the forecast.}
 #'   \item{\code{model}}{an object of class \code{"grnnModel"} with the GRNN
 #'   model}
+#'
+#' @references
+#'
+#' F. Martinez et al. (2022). "Strategies for time series forecasting with
+#' generalized regression neural networks", Neurocomputing, 491, pp. 509--521.
 #'
 #' @examples
 #' pred <- grnn_forecasting(USAccDeaths, h = 12, lags = 1:12)
@@ -144,7 +149,8 @@ grnn_forecasting <- function(timeS, h, lags = NULL, sigma = "ROLLING",
     }
     x <- stats::optim(3, opt, method = "Brent", lower = 0, upper = 1e6)
     sigma <- x$par
-    # mini = -1
+
+        # mini = -1
     # for (x in seq(0.1, 1.2, by = 0.1)) {
     #   f$model$sigma <- x
     #   r <- rolling_origin(f)
