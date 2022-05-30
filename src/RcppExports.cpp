@@ -5,6 +5,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // regression_2
 List regression_2(double sigma, NumericMatrix patterns, NumericMatrix targets, NumericVector example);
 RcppExport SEXP _tsfgrnn_regression_2(SEXP sigmaSEXP, SEXP patternsSEXP, SEXP targetsSEXP, SEXP exampleSEXP) {

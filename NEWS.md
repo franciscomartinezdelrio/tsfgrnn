@@ -1,3 +1,7 @@
+## tsfgrnn 1.0.2
+
+* References to the paper describing this package have been added in the documentation
+
 ## tsfgrnn 1.0.1
 
 * The default transformation is now additive instead of multiplicative.

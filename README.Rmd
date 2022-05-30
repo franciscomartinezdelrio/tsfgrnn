@@ -45,7 +45,7 @@ pred$prediction # To see a time series with the forecasts
 plot(pred)      # To see a plot with the forecast
 ```
 
-To know more, read the package's vignette.
+To know more, the open access paper [Francisco Martinez et al. (2022)](https://doi.org/10.1016/j.neucom.2021.12.028) describes the package. Also, you can read the package's vignette.
 
 ## Acknowledgements
 

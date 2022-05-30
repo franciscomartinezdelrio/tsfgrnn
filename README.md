@@ -30,20 +30,20 @@ This is a basic example which shows how to forecast with tsfgrnn:
 
 ``` r
 library(tsfgrnn)
-#> Warning: replacing previous import 'vctrs::data_frame' by 'tibble::data_frame'
-#> when loading 'dplyr'
 pred <- grnn_forecasting(USAccDeaths, h = 12)
 pred$prediction # To see a time series with the forecasts
 #>            Jan       Feb       Mar       Apr       May       Jun       Jul
-#> 1979  8141.528  7216.485  8123.807  8432.028  9466.795  9829.624 10958.570
+#> 1979  8148.640  7237.667  8131.874  8466.715  9440.860  9793.261 10896.977
 #>            Aug       Sep       Oct       Nov       Dec
-#> 1979 10246.196  9490.048  9439.096  8994.771  9615.380
+#> 1979 10184.601  9463.049  9412.852  8985.240  9583.652
 plot(pred)      # To see a plot with the forecast
 ```
 
 <img src="man/figures/README-example-1.png" width="100%" />
 
-To know more, read the package’s vignette.
+To know more, the open access paper [Francisco Martinez et
+al. (2022)](https://doi.org/10.1016/j.neucom.2021.12.028) describes the
+package. Also, you can read the package’s vignette.
 
 ## Acknowledgements
 
