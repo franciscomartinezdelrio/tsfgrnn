@@ -1,3 +1,7 @@
+## tsfgrnn 1.0.3
+
+* citation information has been added
+
 ## tsfgrnn 1.0.2
 
 * References to the paper describing this package have been added in the documentation
