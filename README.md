@@ -4,6 +4,8 @@
 # tsfgrnn
 
 <!-- badges: start -->
+
+[![R-CMD-check](https://github.com/franciscomartinezdelrio/tsfgrnn/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/franciscomartinezdelrio/tsfgrnn/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 The goal of tsfgrnn is to forecast time series using GRNN regression.

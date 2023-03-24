@@ -20,13 +20,18 @@ plot.grnnForecast <- function(x, y, ...) {
 
 #' Create a ggplot object from a grnnForecast object
 #'
-#' It uses a grnnForecast object to create a ggplot object that plots a time
-#' series and its forecast using GRNN regression.
+#' It uses an object of class `grnnForecast` to create a `ggplot` object that
+#' plots a time series and its forecast using GRNN regression.
 #'
-#' @param forecast The grnnForecast object.
-#' @param highlight A string value indicating what elements should be
-#'     highlighted. Possible values are "none" and "points".
-#' @return The ggplot object representing a plotting with the forecast.
+#' @details Commonly used parameters are:
+#'
+#' * `highlight`. A character string indicating what elements should be highlighted. Possible values are
+#'   `"none"` and `"points"`. The default value is `"none"`.
+#'
+#' @param object An object of class `grnnForecast`.
+#' @param ... additional parameter, see details.
+#'
+#' @return The `ggplot` object representing a plotting with the forecast.
 #'
 #' @examples
 #' pred <- grnn_forecasting(USAccDeaths, h = 12, lags = 1:12, sigma = 50)
@@ -34,8 +39,22 @@ plot.grnnForecast <- function(x, y, ...) {
 #' autoplot(pred)
 #' @export
 #' @importFrom ggplot2 autoplot
-autoplot.grnnForecast <- function(forecast, highlight = c("none", "points")) {
-  highlight = match.arg(highlight)
+autoplot.grnnForecast <- function(object, ...) {
+  # check ... parameter
+  l <- list(...)
+  if (length(l) > 0) {
+    valid_n <- c("highlight") # valid parameter names, apart from object
+    if(! all(names(l) %in% valid_n))
+      stop(paste0("Parameters ", setdiff(names(l), valid_n), " not supported"))
+    if ("highlight" %in% names(l) && (!is.character(l$highlight) || length(l$highlight) > 1)) {
+      stop("highlight parameter should be a character string of length 1")
+    if (! (l$highligth %in% c("none", "points")))
+      stop("Possible values of highlight parameter are 'none' and 'points'")
+    }
+  }
+
+  forecast <- object
+  highlight <- if ("highlight" %in% names(l)) l$highlight else "none"
 
   # extract the time series
   timeS <- data.frame(

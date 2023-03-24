@@ -11,7 +11,7 @@ grnn_weights(forecast)
 }
 \value{
 A list including the input vectors used in GRNN regression and the
-  training examples, with their weights, used in the prediction.
+training examples, with their weights, used in the prediction.
 }
 \description{
 It shows the input vector and the weights of the training examples used in a

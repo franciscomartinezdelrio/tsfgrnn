@@ -4,20 +4,26 @@
 \alias{autoplot.grnnForecast}
 \title{Create a ggplot object from a grnnForecast object}
 \usage{
-\method{autoplot}{grnnForecast}(forecast, highlight = c("none", "points"))
+\method{autoplot}{grnnForecast}(object, ...)
 }
 \arguments{
-\item{forecast}{The grnnForecast object.}
+\item{object}{An object of class \code{grnnForecast}.}
 
-\item{highlight}{A string value indicating what elements should be
-highlighted. Possible values are "none" and "points".}
+\item{...}{additional parameter, see details.}
 }
 \value{
-The ggplot object representing a plotting with the forecast.
+The \code{ggplot} object representing a plotting with the forecast.
 }
 \description{
-It uses a grnnForecast object to create a ggplot object that plots a time
-series and its forecast using GRNN regression.
+It uses an object of class \code{grnnForecast} to create a \code{ggplot} object that
+plots a time series and its forecast using GRNN regression.
+}
+\details{
+Commonly used parameters are:
+\itemize{
+\item \code{highlight}. A character string indicating what elements should be highlighted. Possible values are
+\code{"none"} and \code{"points"}. The default value is \code{"none"}.
+}
 }
 \examples{
 pred <- grnn_forecasting(USAccDeaths, h = 12, lags = 1:12, sigma = 50)
