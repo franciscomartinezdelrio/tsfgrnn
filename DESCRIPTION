@@ -1,7 +1,7 @@
 Package: tsfgrnn
 Type: Package
 Title: Time Series Forecasting Using GRNN
-Version: 1.0.3
+Version: 1.0.4
 Authors@R: c(
     person("Maria Pilar", "Frias-Bustamante", role = c("aut"), email = "mpfrias@ujaen.es"),
     person("Ana Maria", "Martinez-Rodriguez", role = c("aut"), email = "ammartin@ujaen.es"),
@@ -20,7 +20,8 @@ Description: A general regression neural network (GRNN) is a variant of a
     of the model using rolling origin evaluation.
 License: GPL-2
 Encoding: UTF-8
-RoxygenNote: 7.2.0
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
 Suggests: 
     testthat (>= 3.0.0),
     knitr,

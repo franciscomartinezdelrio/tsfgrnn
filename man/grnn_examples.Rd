@@ -11,7 +11,7 @@ grnn_examples(forecast)
 }
 \value{
 A matrix including the features and targets of the examples
-   associated with the model of a \code{grnnForecast} object.
+associated with the model of a \code{grnnForecast} object.
 }
 \description{
 It shows the examples of the model associated to a

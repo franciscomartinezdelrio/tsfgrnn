@@ -42,14 +42,14 @@ a multiplicative transformation or no transformation.}
 }
 \value{
 An object of class \code{"grnnForecast"}. The function
-  \code{\link[base]{summary}} can be used to obtain or print a summary of the
-  results. An object of class \code{"gnnForecast"} is a list containing at
-  least the following components:
+\code{\link[base]{summary}} can be used to obtain or print a summary of the
+results. An object of class \code{"gnnForecast"} is a list containing at
+least the following components:
 
-  \item{\code{call}}{the matched call.} \item{\code{msas}}{the Multi-Step
-  Ahead Strategy.} \item{\code{prediction}}{a time series with the forecast.}
-  \item{\code{model}}{an object of class \code{"grnnModel"} with the GRNN
-  model}
+\item{\code{call}}{the matched call.} \item{\code{msas}}{the Multi-Step
+Ahead Strategy.} \item{\code{prediction}}{a time series with the forecast.}
+\item{\code{model}}{an object of class \code{"grnnModel"} with the GRNN
+model}
 }
 \description{
 It applies GRNN regression to forecast the future values of a time series.
