@@ -71,7 +71,8 @@ grnn_forecasting <- function(timeS, h, lags = NULL, sigma = "ROLLING",
     } else {
       partial <- stats::pacf(timeS, plot = FALSE)
       lags <- which(partial$acf > 2/ sqrt(length(timeS)))
-      if (length(lags) == 0) {
+      if (length(lags) == 0 ||
+          (length(lags) == 1 && transform %in% c("additive", "multiplicative"))) {
         lags = 1:5
       }
     }

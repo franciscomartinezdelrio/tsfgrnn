@@ -1,3 +1,7 @@
+# tsfgrnn 1.0.5
+
+* Now, if the lags are automatically chosen, it is not allowed to use only one autoregressive lag with the additive ormultiplicative transformation (it does not make sense)
+
 # tsfgrnn 1.0.4
 
 * autoplot.grnnForecast has been modified to comply with CRAN

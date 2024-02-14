@@ -1,5 +1,5 @@
 ## Test environments
-* local Windows install, R 4.2.3
+* local Windows install, R 4.3.2
 * Windows Server devel, 32/64 bit
 * Some linux flavors
 
