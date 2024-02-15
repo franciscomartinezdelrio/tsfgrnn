@@ -136,6 +136,8 @@ grnn_forecasting <- function(timeS, h, lags = NULL, sigma = "ROLLING",
 
   if (is.unsorted(lags)) stop("lags should be a vector in increasing order")
   stopifnot(lags[1] >= 1)
+  if (length(lags) == 1 && transform %in% c("additive", "multiplicative"))
+    warning("Using only one lag ant the additive or multiplicative transformation makes no sense")
 
   # Check sigma parameter
   stopifnot(is.numeric(sigma) && sigma > 0 ||
