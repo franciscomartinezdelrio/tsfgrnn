@@ -1,7 +1,6 @@
 ## Test environments
-* local Windows install, R 4.3.2
-* Windows Server devel, 32/64 bit
-* Some linux flavors
+* local Windows install, R 4.6.1
+* Windows Server
 
 ## R CMD check results
 There were no ERRORs, WARNINGs or NOTEs.

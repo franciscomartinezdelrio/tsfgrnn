@@ -1,3 +1,7 @@
+# tsfgrnn 1.0.6
+
+* Changes to deal with new version of Rcpp
+
 # tsfgrnn 1.0.5
 
 * Now, if the lags are automatically chosen, it is not allowed to use only one autoregressive lag with the additive ormultiplicative transformation (it does not make sense)

@@ -39,7 +39,7 @@ List build_examples2(NumericVector timeS, NumericVector lags, int nt) {
   for (int ind = MAXLAG + nt -1; ind < timeS.size(); ++ind) {
     for (int col = 0; col < NCOL; ++col)
       patterns(row, col) = timeS[ind - nt + 1 - lags[col]];
-    targets(row, _) = timeS[Range(ind - nt + 1, ind + 1)];
+    targets(row, _) = timeS[Range(ind - nt + 1, ind)];
     row++;
   }
   List ret;
@@ -66,7 +66,7 @@ List build_examples_m(NumericVector timeS, NumericVector lags, int nt) {
     sum /= NCOL;
     for (int col = 0; col < NCOL; ++col)
       patterns(row, col) /= sum;
-    targets(row, _) = timeS[Range(ind - nt + 1, ind + 1)] / sum;
+    targets(row, _) = timeS[Range(ind - nt + 1, ind)] / sum;
     row++;
   }
   List ret;
@@ -93,7 +93,7 @@ List build_examples_a(NumericVector timeS, NumericVector lags, int nt) {
     sum /= NCOL;
     for (int col = 0; col < NCOL; ++col)
       patterns(row, col) -= sum;
-    targets(row, _) = timeS[Range(ind - nt + 1, ind + 1)] - sum;
+    targets(row, _) = timeS[Range(ind - nt + 1, ind)] - sum;
     row++;
   }
   List ret;
